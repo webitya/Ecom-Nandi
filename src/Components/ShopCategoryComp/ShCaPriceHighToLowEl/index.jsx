@@ -1,0 +1,23 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const ShCaPriceHighToLowEl=()=>{
+    const display=(
+        <>
+            <h1>Aditya1</h1>
+        </>
+    )
+    return display
+}
+export default ShCaPriceHighToLowEl
