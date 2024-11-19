@@ -10,6 +10,7 @@ import { Provider } from "react-redux"
 import store from "./redux/store"
 import Verify from "./Pages/Verify"
 import NotFound from "./Pages/Notfound"
+import Accounts from "./Pages/Accounts"
 
 
 const App=()=>{
@@ -25,6 +26,7 @@ const App=()=>{
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/verify/:token" element={<Verify />} />
+                <Route path="/account" element={<Accounts />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

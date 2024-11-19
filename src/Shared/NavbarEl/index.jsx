@@ -9,7 +9,7 @@ const NavbarEl = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const user = null;
+  const user = "ok";
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 150);
@@ -47,7 +47,7 @@ const NavbarEl = () => {
 
   return (
     <>
-      <nav className={`navbar ${isSticky ? 'sticky-navbar' : ''}`}>
+      <nav className={`navbar ${isSticky ? 'sticky-navbar' : ''}`} style={{top:"-3px",userSelect:"none"}}>
         {/* Logo */}
         <div className="navbar-brand">
           <Link to="/">

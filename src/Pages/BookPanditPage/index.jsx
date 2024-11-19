@@ -1,4 +1,5 @@
-import BookPanditFormEl from "../../Components/BookPandit/BookPanditForm"
+// import BookPanditFormEl from "../../Components/BookPandit/BookPanditForm"
+import BookPanditLayout from "../../Components/BookPandit/BookPanditLayout"
 import LayoutEl from "../../Shared/LayoutEl"
 
 
@@ -7,7 +8,7 @@ const BookPandit=()=>{
     const display=(
         <>
            <LayoutEl>
-           <BookPanditFormEl/>
+           <BookPanditLayout/>
            </LayoutEl>
         </>
     )

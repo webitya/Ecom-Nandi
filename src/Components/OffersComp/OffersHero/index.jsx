@@ -35,7 +35,7 @@ const bestDeals = [
 ];
 const OffersPageHero = () => {
   return (
-    <div className="bg-gradient-to-br from-white to-gray-100 p-10 min-h-screen">
+    <div className="bg-gradient-to-br from-white to-gray-100 p-10 min-h-screen" style={{userSelect:"none"}}>
       {/* Header Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
