@@ -4,9 +4,11 @@ import Input from "../InputField";
 import { useState } from "react";
 import { Spin } from "antd";
 import { useNavigate } from 'react-router-dom';
+import { useRequestApi } from '../../hooks/useRequestApi';
+import toast from 'react-hot-toast';
 
 const RegisterEl = () => {
-    const [checkMail, setCheckMail]= useState(null);
+    const [checkMail, setCheckMail] = useState(null);
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -15,6 +17,7 @@ const RegisterEl = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigate();
+    const [isOpen, setIsopen] = useState(false)
 
     const handleInputChange = (name, value) => {
         setFormData(
@@ -32,7 +35,13 @@ const RegisterEl = () => {
         console.log(formData)
         try {
             setIsLoading(true);
-            const response = await useRequestApi('api/auth/register', 'POST', formData);
+            const response = await useRequestApi('api/auth/register', 'POST', {
+                name: `${formData.first_name} ${formData.last_name}`,
+                email: formData.email,
+                password: formData.password,
+            });
+            console.log(response);
+            setIsopen(true)
         } catch (error) {
             toast.error(error?.response?.data?.message || "Please Try Again");
         } finally {
@@ -101,7 +110,25 @@ const RegisterEl = () => {
                         <Link to={'/login'} className="text-blue-600 cursor-pointer font-semibold">log In</Link>
                     </p>
                 </div>
-            </div>
+            </div>'
+            {isOpen &&
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+                        onClick={() => { setIsopen(false) }}
+                    ></div>
+                    <div className="relative bg-white p-6 rounded-lg shadow-lg z-10 max-w-sm">
+                        <h2 className="text-lg font-semibold mb-4">Check Your Email</h2>
+                        <p className="text-gray-600">We've sent a verification email to your address. Please check your inbox.</p>
+                        <button
+                            onClick={() => setIsopen(false)}
+                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            }
         </div>
     );
 }

@@ -16,7 +16,7 @@ const Verify= () => {
 
         try{
             const response = fetching();
-            if(response.message){
+            if(response.success){
                 toast.success('verified!')
                 setTimeout(()=> {
                     navigation('/login')
