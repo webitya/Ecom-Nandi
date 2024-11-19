@@ -55,7 +55,7 @@ const AccountProfileLayout = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100" style={{userSelect:"none"}}>
       {/* Sidebar for large screens */}
       <div className="hidden md:block w-64 bg-white border-r">
         <Menu
