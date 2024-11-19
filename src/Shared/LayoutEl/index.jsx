@@ -1,5 +1,7 @@
+
 import { FooterEl } from "../FooterEl"
 import NavbarEl from "../NavbarEl"
+import MobileBottom from "../../Components/MobileBottom"
 
 
 
@@ -8,7 +10,9 @@ const LayoutEl=(data)=>{
         <>
            <NavbarEl/>
            {data.children}
+          
            <FooterEl/>
+           <MobileBottom/>
 
         </>
       )
