@@ -1,3 +1,4 @@
+import AccountProfileLayout from "../../Components/AccountProfile/AccountProfileLayout"
 import LayoutEl from "../../Shared/LayoutEl"
 
 
@@ -5,7 +6,7 @@ const Accounts=()=>{
     const display=(
         <>
             <LayoutEl>
-                <h1>Accounts</h1>
+                 <AccountProfileLayout/>
             </LayoutEl>
         </>
     )
