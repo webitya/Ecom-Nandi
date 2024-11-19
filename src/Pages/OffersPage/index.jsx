@@ -7,7 +7,7 @@ const OffersPage=()=>{
     const display=(
         <>
            <LayoutEl>
-           <OffersPageHero/>
+           <OffersPageHero/>   
            </LayoutEl>
         </>
     )
