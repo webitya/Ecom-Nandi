@@ -47,7 +47,7 @@ const NavbarEl = () => {
 
   return (
     <>
-      <nav className={`navbar ${isSticky ? 'sticky-navbar' : ''}`}>
+      <nav className={`navbar ${isSticky ? 'sticky-navbar' : ''}`} style={{top:"-3px"}}>
         {/* Logo */}
         <div className="navbar-brand">
           <Link to="/">
