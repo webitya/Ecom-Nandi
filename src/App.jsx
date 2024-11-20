@@ -14,7 +14,7 @@ import Accounts from "./Pages/Accounts"
 import AddProduct from "./Pages/AddProduct"
 import { useEffect } from "react"
 import { useGetCurrUser } from "./hooks/useGetCurrUser"
-
+import { setUser } from "./redux/features/userSlice/userSlice"
 
 const App = () => {
 
