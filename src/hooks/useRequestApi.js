@@ -6,9 +6,7 @@ export const useRequestApi = async (
     body
 ) => {
     const token = localStorage.getItem('token');
-    console.log(`${import.meta.env.VITE_BASE_URL}/${endpoint}`)
     try {
-
         const response = await axios({
             url: `${import.meta.env.VITE_BASE_URL}/${endpoint}`,
             method: method,
@@ -19,11 +17,9 @@ export const useRequestApi = async (
             },
             withCredentials: true
         });
-        console.log(response);
-        
+        console.log(response)
         return response.data;
-    } catch (error) {
-        throw error;
+    }catch (error) {
+        throw error
     }
-
 }
