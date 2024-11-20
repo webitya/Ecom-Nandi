@@ -13,7 +13,7 @@ import NotFound from "./Pages/Notfound"
 import Accounts from "./Pages/Accounts"
 import { useEffect } from "react"
 import { useGetCurrUser } from "./hooks/useGetCurrUser"
-
+import { setUser } from "./redux/features/userSlice/userSlice"
 
 const App = () => {
 

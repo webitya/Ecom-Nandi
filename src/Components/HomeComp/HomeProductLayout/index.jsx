@@ -1,21 +1,20 @@
 import React from "react";
 import { Card, Row, Col } from "antd";
 import { ShoppingCartOutlined, HeartOutlined } from "@ant-design/icons";
-
-
-// Importing product data directly within this file
-import HomeProductData from "./HomeProductData";
+import { useSelector } from "react-redux";
 
 const HomeProductsLayoutEl =(() => {
+
+  const homeData= useSelector((state) => state.homeProductsData.value)
   return (
     <Row gutter={[24, 24]}  className="p-4">
-      {HomeProductData.map((product) => (
+      {homeData.map((product) => (
         <Col key={product.id} xs={24} sm={12} md={8} lg={6} xl={4}>
           <Card
             hoverable
             className="rounded-lg overflow-hidden shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105"
             cover={
-              <div className="relative w-full h-60 overflow-hidden rounded-t-lg">
+              <div className="relative w-full h-fit overflow-hidden rounded-t-lg">
                 <img
                   src={product.image}
                   alt={product.name}
