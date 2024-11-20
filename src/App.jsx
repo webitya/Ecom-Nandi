@@ -40,7 +40,6 @@ const App = () => {
   const display = (
     <>
         <BrowserRouter>
-          <Provider store={store}>
             <Routes>
                 <Route path="/" element={<HomePage/>}/>
                 <Route path="/shop" element={<ShopPage/>}/>
@@ -54,7 +53,6 @@ const App = () => {
                 <Route path="/add-product" element={<AddProduct />} />
             </Routes>
             <Toaster />
-          </Provider>
         </BrowserRouter>
     </>
   )
