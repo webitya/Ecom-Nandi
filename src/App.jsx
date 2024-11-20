@@ -11,6 +11,7 @@ import store from "./redux/store"
 import Verify from "./Pages/Verify"
 import NotFound from "./Pages/Notfound"
 import Accounts from "./Pages/Accounts"
+import AddProduct from "./Pages/AddProduct"
 
 
 const App=()=>{
@@ -28,6 +29,7 @@ const App=()=>{
                 <Route path="/verify/:token" element={<Verify />} />
                 <Route path="/account" element={<Accounts />} />
                 <Route path="*" element={<NotFound />} />
+                <Route path="/add-product" element={<AddProduct />} />
             </Routes>
             <Toaster />
           </Provider>
