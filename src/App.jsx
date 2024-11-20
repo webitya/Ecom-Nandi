@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux"
 import Verify from "./Pages/Verify"
 import NotFound from "./Pages/Notfound"
 import Accounts from "./Pages/Accounts"
+import AddProduct from "./Pages/AddProduct"
 import { useEffect } from "react"
 import { useGetCurrUser } from "./hooks/useGetCurrUser"
 
@@ -38,20 +39,23 @@ const App = () => {
 
   const display = (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ShopPage />} />
-          <Route path="/book-pandit" element={<BookPandit />} />
-          <Route path="/offers" element={<OffersPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verify/:token" element={<Verify />} />
-          <Route path="/account" element={<Accounts />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Routes>
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/shop" element={<ShopPage/>}/>
+                <Route path="/book-pandit" element={<BookPandit/>}/>
+                <Route path="/offers" element={<OffersPage/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
+                <Route path="/verify/:token" element={<Verify />} />
+                <Route path="/account" element={<Accounts />} />
+                <Route path="*" element={<NotFound />} />
+                <Route path="/add-product" element={<AddProduct />} />
+            </Routes>
+            <Toaster />
+          </Provider>
+        </BrowserRouter>
     </>
   )
   return display
