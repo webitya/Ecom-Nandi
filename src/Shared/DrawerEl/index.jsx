@@ -3,6 +3,8 @@ import { Drawer, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import "./DrawerEl.css";
+import useSelection from 'antd/es/table/hooks/useSelection';
+import { useSelector } from 'react-redux';
 
 const CustomDrawer = ({ toggleDrawer, isDrawerOpen }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,18 +13,24 @@ const CustomDrawer = ({ toggleDrawer, isDrawerOpen }) => {
     setSearchQuery(e.target.value);
   };
 
+  const user = useSelector((state) => state.user)
+
   const navigationLinks = [
     { label: 'Home', href: '/' },
     { label: 'Shop', href: '/shop' },
-    
     { label: 'Book Pandit', href: '/book-pandit' },
     { label: 'Offers', href: '/offers' },
     { label: 'Cart', href: '/cart' },
+    ...(user?.role
+      ? [
+        { label: 'Account', href: '/account' },
+        { label: 'Logout', href: '/logout' },
+      ]
+      : []),
+    { label: 'Login', href: '/login' },
 
-  
-    { label: 'Account', href: '/account' },
-    { label: 'Logout', href: '/logout' },
   ];
+
 
   return (
     <Drawer

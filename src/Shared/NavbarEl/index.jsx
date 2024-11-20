@@ -26,13 +26,22 @@ const NavbarEl = () => {
 
   const profileMenu = (
     <Menu>
-        <Menu.Item key="account">
-          <Link to="/account">Account</Link>
+      {user.role ? (
+        <>
+          <Menu.Item key="account">
+            <Link to="/account">Account</Link>
+          </Menu.Item>
+          <Menu.Item key="logout">
+            <Link to="/logout">Logout</Link>
+          </Menu.Item>
+        </>
+
+      ) : (
+        <Menu.Item key="login">
+          <Link to="/login">Login</Link>
         </Menu.Item>
-      
-      <Menu.Item key="logout">
-        <Link to="/logout">Logout</Link>
-      </Menu.Item>
+      )}
+        
     </Menu>
   );
 
@@ -45,7 +54,7 @@ const NavbarEl = () => {
 
   return (
     <>
-      <nav className={`navbar ${isSticky ? 'sticky-navbar' : ''}`} style={{top:"-3px",userSelect:"none"}}>
+      <nav className={`navbar ${isSticky ? 'sticky-navbar' : ''}`} style={{ top: "-3px", userSelect: "none" }}>
         {/* Logo */}
         <div className="navbar-brand">
           <Link to="/">
@@ -53,7 +62,6 @@ const NavbarEl = () => {
           </Link>
         </div>
 
-        {/* Main Menu */}
         <div className="navbar-menu hidden lg:flex items-center">
           <div className="search-bar flex items-center">
             <SearchOutlined className="text-primary mr-2" />
@@ -73,6 +81,7 @@ const NavbarEl = () => {
           ))}
 
           <div className="profile-dropdown">
+            {user.role ? (
             {user.role === 'user' ? (
               <Dropdown menu={profileMenu} trigger={['hover']}>
                 <Button
