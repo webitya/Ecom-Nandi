@@ -5,11 +5,14 @@ import { MenuOutlined, CloseOutlined, SearchOutlined, UserOutlined, ShoppingCart
 import CustomDrawer from '../DrawerEl'; // Adjust path based on your project structure
 import './NavbarEl.css';
 
+import { useSelector } from 'react-redux';
+
 const NavbarEl = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const user = "ok";
+  const user = useSelector(state => state.user.value)
+  console.log(user)
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 150);
@@ -35,9 +38,10 @@ const NavbarEl = () => {
 
       ) : (
         <Menu.Item key="login">
-          <Link to="/account">Login</Link>
+          <Link to="/login">Login</Link>
         </Menu.Item>
       )}
+        
     </Menu>
   );
 
@@ -78,6 +82,7 @@ const NavbarEl = () => {
 
           <div className="profile-dropdown">
             {user.role ? (
+            {user.role === 'user' ? (
               <Dropdown menu={profileMenu} trigger={['hover']}>
                 <Button
                   icon={<UserOutlined />}
