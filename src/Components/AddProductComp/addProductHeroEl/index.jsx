@@ -1,19 +1,16 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ImageUpload from "../uploadImageEl";
 import { z } from "zod";
 
 const productSchema = z.object({
     images: z.array(z.string()).min(1, "At least one image is required"),
-    name: z.string().nonempty("Name is required"),
-    description: z.string().nonempty("Description is required"),
-    discount: z
-        .number({ invalid_type_error: "Discount must be a number" })
-        .min(0, "Discount cannot be negative")
-        .max(100, "Discount cannot exceed 100"),
-    quantity: z
-        .number({ invalid_type_error: "Quantity must be a number" })
-        .min(1, "Quantity must be at least 1"),
-    category: z.string().nonempty("Category is required"),
+    name: z.string().min(1, "Name is required"),
+    description: z.string().min(1, "Description is required"),
+    quantity: z.string().regex(/^[1-9]\d*$/, "Enter a valid value"),
+    price: z.string().regex(/^[1-9]\d*$/, "Enter a valid positive value"),
+    discountPrice: z.string().regex(/^[1-9]\d*$/, "Enter a valid positive value"),
+
+    category: z.string().min(1, "Category is required"),
 });
 
 const LOCAL_STORAGE_KEY = "productData";
@@ -23,25 +20,24 @@ export const AddProductHero = () => {
     const [productData, setProductData] = useState({
         images: [],
         name: '',
+        price: '',
         description: '',
-        discount: '',
+        discountPrice: '',
         quantity: '',
         category: '',
     });
     const [errors, setErrors] = useState({});
     const [fileList, setFileList] = useState([]); // Initialize as empty array
 
-    // Load saved data from localStorage on mount
     useEffect(() => {
         const savedData = localStorage.getItem('productData');
         const savedImageData = localStorage.getItem('productImageList');
 
-        // Ensure fileList is always an array even if no saved data
         if (savedData) {
             setProductData(JSON.parse(savedData));
         }
         if (savedImageData) {
-            setFileList(JSON.parse(savedImageData)); // Default to an empty array if null
+            setFileList(JSON.parse(savedImageData));
         }
     }, []);
 
@@ -75,24 +71,32 @@ export const AddProductHero = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
+            console.log('Submitting product data:', productData);  // Debugging log
+
             const validatedData = productSchema.parse({
                 ...productData,
-                discount: parseFloat(productData.discount),
-                quantity: parseInt(productData.quantity),
+                // quantity: parseInt(productData.quantity),  // Uncomment if you want to parse quantity as a number
             });
-            console.log("Validated Data:", validatedData);
+
+            console.log("Validated Data:", validatedData); // This will log the validated data
+
             setErrors({});
 
             // Clear saved data from localStorage after successful submission
             localStorage.removeItem('productData');
             localStorage.removeItem('productImageList');
+
+            // Here, you can add further functionality after the successful form submission
+            // For example, you could send the data to a backend server or trigger a success toast.
+
         } catch (error) {
             if (error instanceof z.ZodError) {
                 const fieldErrors = error.flatten().fieldErrors;
-                setErrors(fieldErrors);
+                setErrors(fieldErrors); // Set validation errors if any
             }
         }
     };
+
 
     return (
         <div className="container mx-auto p-4">
@@ -119,6 +123,19 @@ export const AddProductHero = () => {
                     {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                 </div>
 
+                <div className="flex flex-col">
+                    <label className="text-lg font-medium mb-1">Price <span className="text-red-500">*</span></label>
+                    <input
+                        type="text"
+                        name="price"
+                        value={productData.price}
+                        onChange={handleInputChange}
+                        className="border rounded px-2 py-1"
+                        placeholder="Enter product price"
+                    />
+                    {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
+                </div>
+
                 {/* Description Input */}
                 <div className="flex flex-col md:col-span-2">
                     <label className="text-lg font-medium mb-1">Description <span className="text-red-500">*</span></label>
@@ -134,14 +151,14 @@ export const AddProductHero = () => {
 
                 {/* Discount Input */}
                 <div className="flex flex-col">
-                    <label className="text-lg font-medium mb-1">Discount (%)</label>
+                    <label className="text-lg font-medium mb-1">Discount</label>
                     <input
-                        type="number"
+                        type="string"
                         name="discount"
-                        value={productData.discount}
+                        value={productData.discountPrice}
                         onChange={handleInputChange}
                         className="border rounded px-2 py-1"
-                        placeholder="Enter discount percentage"
+                        placeholder="Enter product discount"
                     />
                     {errors.discount && <p className="text-red-500 text-sm">{errors.discount}</p>}
                 </div>

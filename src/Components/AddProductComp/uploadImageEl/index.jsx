@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload, message, Progress } from 'antd';
 import toast from 'react-hot-toast';
@@ -14,9 +14,9 @@ const getBase64 = (file) =>
 const uploadImageToCloudinary = async (file, onProgress) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET);
+    formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET);
 
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`, {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUD_NAME}/image/upload`, {
         method: 'POST',
         body: formData,
     });
@@ -41,46 +41,48 @@ export const ImageUpload = ({ fileList, setFileList }) => {
         setPreviewOpen(true);
     };
 
-
-    const handleChange = async ({ file, fileList: newFileList }) => {
-        if (file.size && file.size / 1024 / 1024 > 1) {
-            const updatedFileList = newFileList.filter((item) => item.uid !== file.uid);
-            setFileList(updatedFileList);
+    const beforeUpload = async (file) => {
+        // Validate file size
+        if (file.size / 1024 / 1024 > 1) {
             toast.error("Image should be less than 1MB");
-            return;
+            return false;
         }
 
+        // Add file to the list manually
+        const newFileList = [...fileList, { uid: file.uid, name: file.name, status: 'uploading', originFileObj: file }];
         setFileList(newFileList);
 
-        if (file.status === 'uploading') {
+        try {
             setUploading(true);
-            try {
-                const url = await uploadImageToCloudinary(file.originFileObj, (percent) => {
-                    setProgress(percent);
-                });
+            const url = await uploadImageToCloudinary(file, (progressPercent) => {
+                setProgress(progressPercent); // Update progress dynamically
+            });
 
-                const updatedFileList = newFileList.map((item) =>
-                    item.uid === file.uid ? { ...item, status: 'done', url } : item
-                );
-                setFileList(updatedFileList);
-                message.success('Image uploaded successfully!');
-            } catch (error) {
-                const updatedFileList = newFileList.map((item) =>
-                    item.uid === file.uid ? { ...item, status: 'error' } : item
-                );
-                setFileList(updatedFileList);
-                message.error('Failed to upload image');
-            } finally {
-                setUploading(false);
-                setProgress(0);
-            }
-        } else if (file.status === 'error') {
-            message.error('Failed to upload image');
+            const updatedFileList = newFileList.map((item) =>
+                item.uid === file.uid ? { ...item, status: 'done', url } : item
+            );
+            setFileList(updatedFileList);
+            toast.success('Image uploaded successfully!');
+        } catch (error) {
+            const updatedFileList = newFileList.map((item) =>
+                item.uid === file.uid ? { ...item, status: 'error' } : item
+            );
+            setFileList(updatedFileList);
+            toast.error('Failed to upload image');
+        } finally {
+            setUploading(false);
+            setProgress(0); // Reset progress bar
         }
+
+        return false; // Prevent automatic upload
     };
 
-    console.log(fileList);
-
+    const handleRemove = (file) => {
+        // Filter out the file being removed
+        const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(updatedFileList);
+        toast.success('Image removed successfully!');
+    };
 
     const uploadButton = (
         <button
@@ -101,19 +103,21 @@ export const ImageUpload = ({ fileList, setFileList }) => {
                 listType="picture-circle"
                 fileList={fileList}
                 onPreview={handlePreview}
-                onChange={handleChange}
+                beforeUpload={beforeUpload}
+                onRemove={handleRemove}
                 showUploadList={{ showRemoveIcon: true }}
             >
                 {fileList.length >= 4 ? null : uploadButton}
             </Upload>
-            {/* {uploading && (
+            {uploading && (
                 <Progress
                     percent={progress}
                     status="active"
-                    size="small" // Updated to 'size' instead of 'strokeWidth'
+                    size="small"
                     style={{ marginTop: 16 }}
                 />
-            )} */}
+            )}
+
             {previewImage && (
                 <Image
                     wrapperStyle={{ display: 'none' }}
