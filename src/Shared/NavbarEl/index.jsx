@@ -24,26 +24,15 @@ const NavbarEl = () => {
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
-  const profileMenu = (
-    <Menu>
-      {user.role ? (
-        <>
-          <Menu.Item key="account">
-            <Link to="/account">Account</Link>
-          </Menu.Item>
-          <Menu.Item key="logout">
-            <Link to="/logout">Logout</Link>
-          </Menu.Item>
-        </>
+  const profileMenu = [
+    user.role
+      ? { key: 'account', label: <Link to="/account">Account</Link> }
+      : { key: 'login', label: <Link to="/login">Login</Link> },
+    user.role
+      ? { key: 'logout', label: <Link to="/logout">Logout</Link> }
+      : null,
+  ].filter(Boolean);
 
-      ) : (
-        <Menu.Item key="login">
-          <Link to="/login">Login</Link>
-        </Menu.Item>
-      )}
-        
-    </Menu>
-  );
 
   const navigationLinks = [
     { label: 'Shop', href: '/shop' },
@@ -82,7 +71,10 @@ const NavbarEl = () => {
 
           <div className="profile-dropdown">
             {user.role === 'user' ? (
-              <Dropdown menu={profileMenu} trigger={['hover']}>
+              <Dropdown
+                menu={{ items: profileMenu }}
+                trigger={['hover']}
+              >
                 <Button
                   icon={<UserOutlined />}
                   className="profile-icon"
@@ -90,6 +82,7 @@ const NavbarEl = () => {
                   size="large"
                 />
               </Dropdown>
+
             ) : (
               <Link to="/login">
                 <Button>Login</Button>
