@@ -1,6 +1,7 @@
+
 import React, { useState } from "react";
-import { PlusOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Space, Upload, Image } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Upload, Image } from "antd";
 import toast from "react-hot-toast";
 import { useUploadCloudinary } from "../../../hooks/useUploadCloudinary";
 import { z } from "zod";
@@ -14,28 +15,27 @@ const getBase64 = (file) =>
   }
 );
 
-const registractionPanditSchema= z.object({
-  imageUrl: z.string().min(1, 'Select a profile photo'),
-  expertise: z.enum(['Marriage', 'Puja in Temples', 'Puja in Domestics']),
-  experience: z.string().min(1, 'Experience is required').regex(/^[1-9]\d*$/, "Enter a valid value"),
-  contact: z.string()
+const registractionSellerSchema= z.object({
+  imageUrl: z.string().min(1, 'Select a shop photo'),
+  shop_name: z.string().min(1, 'Shop name is required').regex(/^[1-9]\d*$/, "Enter Shop name"),
+  shop_address: z.string('Enter vail value').min(1, 'Enter shop address'),
+  shop_contact: z.string()
   .min(10, 'Contact must be at least 10 digits long')
   .max(10, 'Contact must be at least 10 digits long')
   .regex(/^[1-9]\d*$/, "Enter a valid Contact"),
-  age: z.string().min(2, 'Age must be in double digits').regex(/^[1-9]\d*$/, "Enter a valid age"),
 })
 
-const AccRegisterPanditEl = () => {
 
+
+const AccRegisterSellerEl=  () => {
   const [formdata, setFormdata] = useState({
     imageUrl: "",
-    expertise: "Marriage",
-    experience: "",
-    contact: "",
-    age: "",
+    shop_name: "",
+    shop_contact: "",
+    shop_address: "",
   });
 
-  const [schemaError, setSchemaError] = useState({});
+  const [schemaError, setSchemaError] = useState({})
   const [fileList, setFileList] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -83,20 +83,6 @@ const AccRegisterPanditEl = () => {
     toast.success("Image removed successfully!");
   };
 
-  const handleMenuClick = (e) => {
-    const { key } = e;
-    const [{ label }] = items.filter((value) => value.key === key);
-    setFormdata((prev) => ({ ...prev, expertise: label }));
-  };
-
-  const items = [
-    { label: "Marriage", key: "1", icon: <UserOutlined /> },
-    { label: "Puja in Temples", key: "2", icon: <UserOutlined /> },
-    { label: "Puja in Domestics", key: "3", icon: <UserOutlined /> },
-  ];
-
-  const menuProps = { items, onClick: handleMenuClick };
-
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
     setFormdata((prev) => ({ ...prev, [name]: value }));
@@ -104,7 +90,8 @@ const AccRegisterPanditEl = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = registractionPanditSchema.safeParse(formdata);
+    const result = registractionSellerSchema.safeParse(formdata);
+    console.log(result)
     if(result.success) {
       const serverData = { ...formdata };
       console.log("Submitting data to server:", serverData);
@@ -131,83 +118,69 @@ const AccRegisterPanditEl = () => {
       <form className="mt-8 flex flex-col gap-6" onSubmit={handleSubmit}>
 
         <div className="flex gap-4 items-center">
-          <span className="font-semibold w-32 block">Shop Image<span className="text-red-600 font-bold">*</span> :</span>
-          <Upload
+            <span className="font-semibold w-32 block">Shop Image<span className="text-red-600 font-bold">*</span> :</span>
+            <Upload
             listType="picture-circle"
             fileList={fileList}
             onPreview={handlePreview}
             beforeUpload={beforeUpload}
             onRemove={handleRemove}
             showUploadList={{ showRemoveIcon: true }}
-          >
+            >
             {fileList.length >= 1 ? null : uploadButton}
-          </Upload>
+            </Upload>
 
-          {previewImage && (
+            {previewImage && (
             <Image
-              wrapperStyle={{ display: "none" }}
-              preview={{
+                wrapperStyle={{ display: "none" }}
+                preview={{
                 visible: previewOpen,
                 onVisibleChange: (visible) => setPreviewOpen(visible),
                 afterOpenChange: (visible) => !visible && setPreviewImage(""),
-              }}
-              src={previewImage}
+                }}
+                src={previewImage}
             />
-          )}
-
-        {schemaError.imageUrl && <p style={{ color: "red" }}>{schemaError.imageUrl}</p>}
+            )}
+             {schemaError.imageUrl && <p style={{ color: "red" }}>{schemaError.imageUrl}</p>}
         </div>
 
         <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Expertise<span className="text-red-600 font-bold">*</span> :</span>
-          <Dropdown menu={menuProps}>
-            <Button>
-              <Space>
-                {formdata.expertise}
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-          {schemaError.expertise && <p style={{ color: "red" }}>{schemaError.expertise}</p>}
-        </div>
-
-        <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Age<span className="text-red-600 font-bold">*</span> :</span>
+          <span className="font-semibold w-32 block">Shop Name<span className="text-red-600 font-bold">*</span> :</span>
           <input
             type="text"
-            name="age"
-            value={formdata.age}
+            name="shop_name"
+            value={formdata.shop_name}
             onChange={handleChange}
             className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md"
-            placeholder="Enter your Age"
+            placeholder="Enter Shop Name"
           />
-          {schemaError.age && <p style={{ color: "red" }}>{schemaError.age}</p>}
+           {schemaError.shop_name && <p style={{ color: "red" }}>{schemaError.shop_name}</p>}
         </div>
 
         <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Experience<span className="text-red-600 font-bold">*</span> :</span>
+          <span className="font-semibold w-32 block">Shop Address<span className="text-red-600 font-bold">*</span> :</span>
           <input
             type="text"
-            name="experience"
-            value={formdata.experience}
+            name="shop_address"
+            value={formdata.shop_address}
             onChange={handleChange}
             className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md"
-            placeholder="e.g 5 years of experience"
+            placeholder="Enter Shop Address"
           />
-          {schemaError.experience && <p style={{ color: "red" }}>{schemaError.experience}</p>}
+          {schemaError.shop_address && <p style={{ color: "red" }}>{schemaError.shop_address}</p>}
         </div>
 
         <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Contact<span className="text-red-600 font-bold">*</span> :</span>
+          <span className="font-semibold w-32 block">Shop Contact<span className="text-red-600 font-bold">*</span> :</span>
           <input
             type="text"
-            name="contact"
-            value={formdata.contact}
+            name="shop_contact"
+            value={formdata.shop_contact}
             onChange={handleChange}
             className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md"
-            placeholder="Enter your Contact no."
+            placeholder="Enter Contact no."
           />
-          {schemaError.contact && <p style={{ color: "red" }}>{schemaError.contact}</p>}
+          {schemaError.shop_contact && <p style={{ color: "red" }}>{schemaError.shop_contact}</p>}
         </div>
 
         <div className="flex gap-4">
@@ -223,4 +196,4 @@ const AccRegisterPanditEl = () => {
   );
 };
 
-export default AccRegisterPanditEl;
+export default AccRegisterSellerEl;

@@ -16,7 +16,6 @@ const productSchema = z.object({
 const LOCAL_STORAGE_KEY = "productData";
 
 export const AddProductHero = () => {
-    const [imageUrl, setImageUrl] = useState([]);
     const [productData, setProductData] = useState({
         images: [],
         name: '',

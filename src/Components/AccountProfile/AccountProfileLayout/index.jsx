@@ -1,7 +1,8 @@
 
 
 import React, { useState } from 'react';
-import { GiftOutlined, MenuOutlined, UserAddOutlined } from '@ant-design/icons';
+import { GiftOutlined, MenuOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { Drawer, Menu, Button } from 'antd';
 import {
   UserOutlined,
@@ -17,13 +18,13 @@ import AccAddressEl from '../AccAddressEl';
 import AccPanditEl from '../AccPanditEl';
 import AccSellerEl from '../AccSellerEl';
 import AccSettingEl from '../AccSettingEl';
-import { useNavigate } from 'react-router-dom';
-import AccRegisterPandit from '../AccRegisterPanditEl';
+import AccRegisterPanditEl  from '../AccRegisterPanditEl';
+import AccRegisterSellerEl from '../AccRegisterSellerEl';
 
 const AccountProfileLayout = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   // Example user object. Replace with actual user data.
   const user = { role: 'user' }; // Example: User has both roles.
 
@@ -48,7 +49,9 @@ const AccountProfileLayout = () => {
       case 'address':
         return <AccAddressEl />;
       case 'register_as_pandit':
-          return <AccRegisterPandit />;
+        return <AccRegisterPanditEl />;
+      case 'register_as_seller':
+        return <AccRegisterSellerEl />;
       case 'pandit':
         return <AccPanditEl />;
       case 'seller':
@@ -60,28 +63,19 @@ const AccountProfileLayout = () => {
     }
   };
 
-  const handleClick= (e) => {
-    switch (e.key) {
-
-      case 'register_as_seller': 
-        navigate('/login')
-        break;
-
-      default:
-        setActiveTab(e.key)
-        break;
-    }
-    
-  }
-
   return (
-    <div className="flex min-h-screen bg-gray-100" style={{userSelect:"none"}}>
+    <div className="flex min-h-screen bg-gray-100" style={{ userSelect: "none" }}>
       {/* Sidebar for large screens */}
       <div className="hidden md:block w-64 bg-white border-r">
         <Menu
           mode="inline"
           defaultSelectedKeys={['profile']}
-          onClick={handleClick}
+          onClick={
+            (e) => {
+              const { key } = e;
+              setActiveTab(key);
+            }
+          }
           items={menuItems}
           className="h-full"
         />
