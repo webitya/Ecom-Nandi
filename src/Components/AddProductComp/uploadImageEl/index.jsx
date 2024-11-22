@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Image, Upload, message, Progress } from 'antd';
+import { Image, Upload, Progress } from 'antd';
 import toast from 'react-hot-toast';
+import { useUploadCloudinary } from '../../../hooks/useUploadCloudinary';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -9,23 +10,8 @@ const getBase64 = (file) =>
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
-    });
-
-const uploadImageToCloudinary = async (file, onProgress) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET);
-
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUD_NAME}/image/upload`, {
-        method: 'POST',
-        body: formData,
-    });
-    if (!response.ok) {
-        throw new Error('Failed to upload image');
     }
-    const data = await response.json();
-    return data.secure_url;
-};
+);
 
 export const ImageUpload = ({ fileList, setFileList }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -42,21 +28,16 @@ export const ImageUpload = ({ fileList, setFileList }) => {
     };
 
     const beforeUpload = async (file) => {
-        // Validate file size
         if (file.size / 1024 / 1024 > 1) {
             toast.error("Image should be less than 1MB");
             return false;
         }
-
-        // Add file to the list manually
         const newFileList = [...fileList, { uid: file.uid, name: file.name, status: 'uploading', originFileObj: file }];
         setFileList(newFileList);
 
         try {
             setUploading(true);
-            const url = await uploadImageToCloudinary(file, (progressPercent) => {
-                setProgress(progressPercent); // Update progress dynamically
-            });
+            const url = await useUploadCloudinary(file);
 
             const updatedFileList = newFileList.map((item) =>
                 item.uid === file.uid ? { ...item, status: 'done', url } : item
