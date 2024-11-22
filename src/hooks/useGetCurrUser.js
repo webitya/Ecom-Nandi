@@ -1,6 +1,4 @@
-import toast from "react-hot-toast";
 import { useRequestApi } from "./useRequestApi"
-
 
 export const useGetCurrUser = async () => {
     try {

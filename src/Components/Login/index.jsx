@@ -37,6 +37,7 @@ const LoginEl = () => {
                 email: response.user.email,
                 role: response.user.role,
             }));
+            localStorage.setItem('token', response?.token)
             navigation('/');
         } catch (error) {
             toast.error(error?.response?.data?.message || "Login failed");
