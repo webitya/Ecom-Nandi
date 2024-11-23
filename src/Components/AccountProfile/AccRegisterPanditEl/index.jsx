@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { PlusOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Space, Upload, Image } from "antd";
 import toast from "react-hot-toast";
 import { useUploadCloudinary } from "../../../hooks/useUploadCloudinary";
 import { z } from "zod";
+
+import StatusAndProfileEl from "../Status&ProfileEl";
+import UplaodBtnEl from "../UploadBtnEl";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -117,108 +120,104 @@ const AccRegisterPanditEl = () => {
     }
   };
 
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
-
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Register as Pandit</h2>
+    <div className="flex flex-col gap-4">
+      <div className="p-6 bg-white shadow-lg rounded-lg">
+        <h2 className="sm:text-3xl text-xl font-bold mb-6 text-gray-800">Register as Pandit</h2>
 
-      <form className="mt-8 flex flex-col gap-6" onSubmit={handleSubmit}>
+        <form className="mt-8 flex flex-col gap-6" onSubmit={handleSubmit}>
 
-        <div className="flex gap-4 items-center">
-          <span className="font-semibold w-32 block">Shop Image<span className="text-red-600 font-bold">*</span> :</span>
-          <Upload
-            listType="picture-circle"
-            fileList={fileList}
-            onPreview={handlePreview}
-            beforeUpload={beforeUpload}
-            onRemove={handleRemove}
-            showUploadList={{ showRemoveIcon: true }}
-          >
-            {fileList.length >= 1 ? null : uploadButton}
-          </Upload>
+          <div className="flex sm:flex-row items-center sm:gap-4 flex-col gap-1 ">
+            <span className="font-semibold w-32 hidden sm:block">Profile Image<span className="text-red-600 font-bold">*</span> :</span>
+            <Upload
+              listType="picture-circle"
+              fileList={fileList}
+              onPreview={handlePreview}
+              beforeUpload={beforeUpload}
+              onRemove={handleRemove}
+              showUploadList={{ showRemoveIcon: true }}
+            >
+              {fileList.length >= 1 ? null : <UplaodBtnEl name={'Profile'}/>}
+            </Upload>
 
-          {previewImage && (
-            <Image
-              wrapperStyle={{ display: "none" }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(""),
-              }}
-              src={previewImage}
+            {previewImage && (
+              <Image
+                wrapperStyle={{ display: "none" }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
+                }}
+                src={previewImage}
+              />
+            )}
+
+          {schemaError.imageUrl && <p style={{ color: "red" }}>{schemaError.imageUrl}</p>}
+          </div>
+
+          <div className="flex sm:flex-row sm:items-center sm:gap-4 flex-col items-start gap-1">
+            <span className="font-semibold w-28 block">Expertise<span className="text-red-600 font-bold">*</span> :</span>
+            <Dropdown menu={menuProps}>
+              <Button className="w-full sm:w-fit">
+                <Space>
+                  {formdata.expertise}
+                  <DownOutlined />
+                </Space>
+              </Button>
+            </Dropdown>
+            {schemaError.expertise && <p style={{ color: "red" }}>{schemaError.expertise}</p>}
+          </div>
+
+          <div className="flex sm:flex-row sm:items-center sm:gap-4 flex-col items-start gap-1">
+            <span className="font-semibold w-28 block">Age<span className="text-red-600 font-bold">*</span> :</span>
+            <input
+              type="text"
+              name="age"
+              value={formdata.age}
+              onChange={handleChange}
+              className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md w-full sm:w-fit"
+              placeholder="Enter your Age"
             />
-          )}
+            {schemaError.age && <p style={{ color: "red" }}>{schemaError.age}</p>}
+          </div>
 
-        {schemaError.imageUrl && <p style={{ color: "red" }}>{schemaError.imageUrl}</p>}
-        </div>
+          <div className="flex sm:flex-row sm:items-center sm:gap-4 flex-col items-start gap-1 ">
+            <span className="font-semibold w-28 block">Experience<span className="text-red-600 font-bold">*</span> :</span>
+            <input
+              type="text"
+              name="experience"
+              value={formdata.experience}
+              onChange={handleChange}
+              className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md w-full sm:w-fit"
+              placeholder="e.g 5 years of experience"
+            />
+            {schemaError.experience && <p style={{ color: "red" }}>{schemaError.experience}</p>}
+          </div>
 
-        <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Expertise<span className="text-red-600 font-bold">*</span> :</span>
-          <Dropdown menu={menuProps}>
-            <Button>
-              <Space>
-                {formdata.expertise}
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-          {schemaError.expertise && <p style={{ color: "red" }}>{schemaError.expertise}</p>}
-        </div>
+          <div className="flex sm:flex-row sm:items-center sm:gap-4 flex-col items-start gap-1 ">
+            <span className="font-semibold w-28 block">Contact<span className="text-red-600 font-bold">*</span> :</span>
+            <input
+              type="text"
+              name="contact"
+              value={formdata.contact}
+              onChange={handleChange}
+              className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md w-full sm:w-fit"
+              placeholder="Enter your Contact no."
+            />
+            {schemaError.contact && <p style={{ color: "red" }}>{schemaError.contact}</p>}
+          </div>
 
-        <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Age<span className="text-red-600 font-bold">*</span> :</span>
-          <input
-            type="text"
-            name="age"
-            value={formdata.age}
-            onChange={handleChange}
-            className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md"
-            placeholder="Enter your Age"
-          />
-          {schemaError.age && <p style={{ color: "red" }}>{schemaError.age}</p>}
-        </div>
-
-        <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Experience<span className="text-red-600 font-bold">*</span> :</span>
-          <input
-            type="text"
-            name="experience"
-            value={formdata.experience}
-            onChange={handleChange}
-            className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md"
-            placeholder="e.g 5 years of experience"
-          />
-          {schemaError.experience && <p style={{ color: "red" }}>{schemaError.experience}</p>}
-        </div>
-
-        <div className="flex gap-4 items-center">
-          <span className="font-semibold w-28 block">Contact<span className="text-red-600 font-bold">*</span> :</span>
-          <input
-            type="text"
-            name="contact"
-            value={formdata.contact}
-            onChange={handleChange}
-            className="outline-none border border-gray-300 px-4 py-1 text-sm rounded-md"
-            placeholder="Enter your Contact no."
-          />
-          {schemaError.contact && <p style={{ color: "red" }}>{schemaError.contact}</p>}
-        </div>
-
-        <div className="flex gap-4">
-          <button type="button" className="px-4 py-1 rounded-md bg-blue-500">
-            Draft
-          </button>
-          <button type="submit" className="px-4 py-1 rounded-md bg-green-500">
-            Submit
-          </button>
-        </div>
-      </form>
+          <div className="flex gap-4 justify-center sm:justify-start">
+            <button type="button" className="px-4 py-1 rounded-md bg-blue-500">
+              Draft
+            </button>
+            <button type="submit" className="px-4 py-1 rounded-md bg-green-500">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+      <StatusAndProfileEl />
     </div>
   );
 };
