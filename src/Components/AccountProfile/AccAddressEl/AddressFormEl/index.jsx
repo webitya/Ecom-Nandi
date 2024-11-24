@@ -10,11 +10,11 @@ const addressSchema= z.object({
     .max(10,'Contact must be atleat 10 digit')
     .regex(/^[1-9]\d*$/, "Enter a valid Contact"),
     street: z.string().min(1, 'Enter your street'),
-    city: z.string(),
+    city: z.string().min(1,'Enter your city'),
     postalCode: z.string()
     .min(6, 'Postal Code must be at leat 6 digit')
     .regex(/^[1-9]\d*$/, "Enter a valid Postal Code"),
-    state: z.string()
+    state: z.string().min(1, 'Enter your State')
 });
 
 const AddAddressForm = () => {
@@ -33,8 +33,8 @@ const AddAddressForm = () => {
     
     const handleSaveAddress = (e) => {
         e.preventDefault()
-        const result= addressSchema.safeParse(AddAddressForm);
-        // console.log(result)
+        const result= addressSchema.safeParse(newAddress);
+        console.log(result)
         if(result.success){
             console.log()
             toast.success("Address added successfully!");
@@ -44,7 +44,7 @@ const AddAddressForm = () => {
               return acc;
             }, {});
             console.log(errorMap)
-            // setSchemaError(errorMap);
+            setSchemaError(errorMap);
         }
     };
 
@@ -60,19 +60,21 @@ const AddAddressForm = () => {
                 <input 
                     type="text" 
                     name="name" 
-                    placeholder={schemaError.name ? schemaError.name :"Full Name"}
+                    placeholder="Full Name"
                     value={newAddress.name}
                     onChange={handleChange}
                     className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
                 />
+                {schemaError.name && <p className='text-red-500'>{schemaError.name}</p>}
                 <input 
                     type="text" 
                     name="phone" 
                     placeholder="Phone Number"
                     value={newAddress.phone}
                     onChange={handleChange}
-                   className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                    className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
                 />
+                {schemaError.phone && <p className='text-red-500'>{schemaError.phone}</p>}
                 <input 
                     type="text" 
                     name="street" 
@@ -81,6 +83,7 @@ const AddAddressForm = () => {
                     onChange={handleChange}
                     className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
                 />
+                {schemaError.street && <p className='text-red-500'>{schemaError.street}</p>}
                 <input 
                     type="text" 
                     name="city" 
@@ -89,6 +92,7 @@ const AddAddressForm = () => {
                     onChange={handleChange}
                     className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
                 />
+                {schemaError.city && <p className='text-red-500'>{schemaError.city}</p>}
                 <input 
                     type="text" 
                     name="postalCode" 
@@ -97,6 +101,7 @@ const AddAddressForm = () => {
                     onChange={handleChange}
                     className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
                 />
+                {schemaError.postalCode && <p className='text-red-500'>{schemaError.postalCode}</p>}
                 
                 <input 
                     type="text"
@@ -106,6 +111,7 @@ const AddAddressForm = () => {
                     onChange={handleChange} 
                     className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
                 />
+                {schemaError.state && <p className='text-red-500'>{schemaError.state}</p>}
 
                 <div className='flex '>
                     <button 

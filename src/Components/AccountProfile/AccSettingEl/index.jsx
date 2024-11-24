@@ -4,7 +4,7 @@
 const AccSettingEl=()=>{
     const display=(
         <>
-        <h1>Account Setting</h1>
+        <h1>Mera Setting Nahi hai</h1>
         </>
     )
     return display
