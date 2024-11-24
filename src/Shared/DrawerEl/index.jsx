@@ -13,7 +13,8 @@ const CustomDrawer = ({ toggleDrawer, isDrawerOpen }) => {
     setSearchQuery(e.target.value);
   };
 
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user.value)
+  console.log(user)
 
   const navigationLinks = [
     { label: 'Home', href: '/' },
@@ -26,8 +27,10 @@ const CustomDrawer = ({ toggleDrawer, isDrawerOpen }) => {
         { label: 'Account', href: '/account' },
         { label: 'Logout', href: '/logout' },
       ]
-      : []),
-    { label: 'Login', href: '/login' },
+      : [
+        { label: 'Login', href: '/login' }
+      ]
+    )
 
   ];
 
