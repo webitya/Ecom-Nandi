@@ -18,10 +18,8 @@ export const useRequestApi = async (
             withCredentials: true
         });
         console.log('useapirequest', response);
-
-        console.log(response)
         return response.data;
-    }catch (error) {
+    } catch (error) {
         throw error
     }
 }
