@@ -11,7 +11,7 @@ const Verify = () => {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-          const fetching= async() => {
+        const fetching = async () => {
             try {
                 const response = await useRequestApi(`api/auth/verify?token=${token}`, 'POST');
                 console.log('response ', response)
@@ -22,7 +22,7 @@ const Verify = () => {
             } catch (error) {
                 console.log("error ", error)
                 setError(error?.response?.data?.message || error.message || 'some error')
-                toast.error(error?.response?.data?.message  || error.message || 'some error')
+                toast.error(error?.response?.data?.message || error.message || 'some error')
                 setTimeout(() => {
                     navigation('/register')
                 }, 2000)
