@@ -14,6 +14,7 @@ import Accounts from "./Pages/Accounts"
 import AddProduct from "./Pages/AddProduct"
 import { useEffect } from "react"
 import { useGetCurrUser } from "./hooks/useGetCurrUser"
+import Owner from "./Pages/Owner"
 
 
 const App = () => {
@@ -51,6 +52,7 @@ const App = () => {
                 <Route path="/account" element={<Accounts />} />
                 <Route path="*" element={<NotFound />} />
                 <Route path="/add-product" element={<AddProduct />} />
+                <Route path="/owner" element={<Owner/>} />
             </Routes>
             <Toaster />
         </BrowserRouter>

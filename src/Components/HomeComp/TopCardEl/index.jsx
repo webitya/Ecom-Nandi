@@ -9,21 +9,18 @@ import {
   LaptopOutlined,
   HeartOutlined,
   HomeOutlined,
-  TrophyOutlined,
-  SmileOutlined,
   BookOutlined,
+  GiftOutlined,
+  TruckOutlined,
 } from "@ant-design/icons";
 
 const products = [
-  { title: "Grocery", href: "/grocery-supermart-store", gradient: "from-green-400 to-green-600", icon: <ShoppingCartOutlined /> },
-  { title: "Mobiles", href: "/mobile-phones-store", gradient: "from-blue-400 to-blue-600", icon: <MobileOutlined /> },
-  { title: "Fashion", href: "/fashion-store", gradient: "from-purple-400 to-purple-600", icon: <SkinOutlined /> },
-  { title: "Electronics", href: "/electronics-store", gradient: "from-yellow-400 to-yellow-600", icon: <LaptopOutlined /> },
-  { title: "Beauty", href: "/beauty-personal-care", gradient: "from-pink-400 to-pink-600", icon: <HeartOutlined /> },
-  { title: "Home & Furniture", href: "/home-furniture-store", gradient: "from-teal-400 to-teal-600", icon: <HomeOutlined /> },
-  { title: "Sports", href: "/sports-outdoors-store", gradient: "from-orange-400 to-orange-600", icon: <TrophyOutlined /> },
-  { title: "Toys", href: "/toys-games-store", gradient: "from-indigo-400 to-indigo-600", icon: <SmileOutlined /> },
-  { title: "Books", href: "/books-store", gradient: "from-gray-400 to-gray-600", icon: <BookOutlined /> },
+  { title: "Flowers", href: "/shop", gradient: "from-green-400 to-green-600", icon: <TruckOutlined /> },
+  { title: "Clothes", href: "/shop", gradient: "from-blue-400 to-blue-600", icon: <SkinOutlined/> },
+  { title: "Daily Puja", href: "/shop", gradient: "from-purple-400 to-purple-600", icon: <ShoppingCartOutlined /> },
+  { title: "Book", href: "/shop", gradient: "from-yellow-400 to-yellow-600", icon: <BookOutlined /> },
+  { title: "Gift", href: "/shop", gradient: "from-pink-400 to-pink-600", icon: <GiftOutlined /> },
+  { title: "Festival", href: "/shop", gradient: "from-teal-400 to-teal-600", icon: <HomeOutlined /> },
 ];
 
 const TopProductCarEl = () => {

@@ -12,7 +12,7 @@ export const BookPanditButton = () => {
     const navigation= useNavigate();
 
     const handleNavigation = () => {
-        navigation('/bookpandit');
+        navigation('/book-pandit');
     };
 
     const handleScroll = () => {
