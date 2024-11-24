@@ -6,6 +6,7 @@ import HomeCarousel2 from "../../Components/HomeComp/HomeCarousel2"
 import HomeProductsLayoutEl from "../../Components/HomeComp/HomeProductLayout"
 import { NewProduct } from "../../Components/HomeComp/NewProduct"
 import TopProductCarEl from "../../Components/HomeComp/TopCardEl"
+import LoadMore from "../../Components/LoadMoreComp"
 import LayoutEl from "../../Shared/LayoutEl"
 
 
@@ -21,6 +22,7 @@ const HomePage=()=>{
             <FeaturedProduct/>
             <NewProduct/>
             <HomeProductsLayoutEl/>
+            <LoadMore />
             <CalendarBanner/>
             <BookPanditButton/>
           </LayoutEl>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { Spin } from "antd";
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/features/userSlice";
+import { setUser } from "../../redux/features/userSlice/userSlice"; 
 import toast from "react-hot-toast";
 import { useRequestApi } from "../../hooks/useRequestApi";
 
@@ -37,6 +37,7 @@ const LoginEl = () => {
                 email: response.user.email,
                 role: response.user.role,
             }));
+            localStorage.setItem('token', response?.token)
             navigation('/');
         } catch (error) {
             toast.error(error?.response?.data?.message || "Login failed");
