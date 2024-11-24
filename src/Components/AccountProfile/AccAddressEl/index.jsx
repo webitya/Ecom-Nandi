@@ -17,16 +17,16 @@ const AccAddressEl = () => {
             state: 'NY',
             isDefault: false,
         },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            phone: '9876543211',
-            street: '456 Elm St',
-            city: 'Los Angeles',
-            postalCode: '90001',
-            state: 'CA',
-            isDefault: false,
-        },
+        // {
+        //     id: 2,
+        //     name: 'Jane Smith',
+        //     phone: '9876543211',
+        //     street: '456 Elm St',
+        //     city: 'Los Angeles',
+        //     postalCode: '90001',
+        //     state: 'CA',
+        //     isDefault: false,
+        // },
     ]);
 
     const [selectedAddress, setSelectedAddress] = useState(null); // Store the selected address

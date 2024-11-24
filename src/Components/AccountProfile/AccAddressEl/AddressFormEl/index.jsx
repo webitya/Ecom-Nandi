@@ -1,8 +1,21 @@
-
 import { useState } from 'react';
-import { Button, Input } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { z } from 'zod';
+
+const addressSchema= z.object({
+    name: z.string().min(1, 'Enter your name'),
+    phone: z.string()
+    .min(10 ,'Contact must be atleat 10 digit')
+    .max(10,'Contact must be atleat 10 digit')
+    .regex(/^[1-9]\d*$/, "Enter a valid Contact"),
+    street: z.string().min(1, 'Enter your street'),
+    city: z.string(),
+    postalCode: z.string()
+    .min(6, 'Postal Code must be at leat 6 digit')
+    .regex(/^[1-9]\d*$/, "Enter a valid Postal Code"),
+    state: z.string()
+});
 
 const AddAddressForm = () => {
     const [newAddress, setNewAddress] = useState({
@@ -14,74 +27,102 @@ const AddAddressForm = () => {
         state: '',
     });
 
-    const navigation =useNavigate()
-    
-    const handleSaveAddress = () => {
-        if (!Object.values(newAddress).every((field) => field.trim())) {
-            toast.error("Please fill in all fields.");
-            return;
-        }
+    const [schemaError, setSchemaError]= useState({})
 
-        // Save the address (e.g., send it to the server or save in localStorage)
-        toast.success("Address added successfully!");
-        navigation('/checkout'); // Navigate back to the checkout page
+    // const navigation =useNavigate()
+    
+    const handleSaveAddress = (e) => {
+        e.preventDefault()
+        const result= addressSchema.safeParse(AddAddressForm);
+        // console.log(result)
+        if(result.success){
+            console.log()
+            toast.success("Address added successfully!");
+        }else{
+            const errorMap = result.error.errors.reduce((acc, curr) => {
+              acc[curr.path[0]] = curr.message; // Field name and error message
+              return acc;
+            }, {});
+            console.log(errorMap)
+            // setSchemaError(errorMap);
+        }
     };
+
+    const handleChange= (e) => {
+        const { name,value }= e.target
+        setNewAddress({ ...newAddress, [name]: value })
+    }
 
     return (
         <div className="container mx-auto p-6">
             <h2 className="text-2xl font-semibold mb-6">Add New Address</h2>
+            <form className="flex flex-col gap-2" onSubmit={handleSaveAddress}>
+                <input 
+                    type="text" 
+                    name="name" 
+                    placeholder={schemaError.name ? schemaError.name :"Full Name"}
+                    value={newAddress.name}
+                    onChange={handleChange}
+                    className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                />
+                <input 
+                    type="text" 
+                    name="phone" 
+                    placeholder="Phone Number"
+                    value={newAddress.phone}
+                    onChange={handleChange}
+                   className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                />
+                <input 
+                    type="text" 
+                    name="street" 
+                    placeholder="Street Address"
+                    value={newAddress.street}
+                    onChange={handleChange}
+                    className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                />
+                <input 
+                    type="text" 
+                    name="city" 
+                    placeholder="City"
+                    value={newAddress.city}
+                    onChange={handleChange}
+                    className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                />
+                <input 
+                    type="text" 
+                    name="postalCode" 
+                    placeholder="Postal Code"
+                    value={newAddress.postalCode}
+                    onChange={handleChange}
+                    className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                />
+                
+                <input 
+                    type="text"
+                    name="state" 
+                    placeholder="State"
+                    value={newAddress.state}
+                    onChange={handleChange} 
+                    className="mb-2 px-3 py-1 text-sm  rounded-sm hover:outline focus:outline outline-1 outline-blue-500"
+                />
 
-            <Input
-                placeholder="Full Name"
-                value={newAddress.name}
-                onChange={(e) => setNewAddress({ ...newAddress, name: e.target.value })}
-                className="mb-2"
-            />
-            <Input
-                placeholder="Phone Number"
-                value={newAddress.phone}
-                onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
-                className="mb-2"
-            />
-            <Input
-                placeholder="Street Address"
-                value={newAddress.street}
-                onChange={(e) => setNewAddress({ ...newAddress, street: e.target.value })}
-                className="mb-2"
-            />
-            <Input
-                placeholder="City"
-                value={newAddress.city}
-                onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                className="mb-2"
-            />
-            <Input
-                placeholder="Postal Code"
-                value={newAddress.postalCode}
-                onChange={(e) => setNewAddress({ ...newAddress, postalCode: e.target.value })}
-                className="mb-2"
-            />
-            <Input
-                placeholder="State"
-                value={newAddress.state}
-                onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                className="mb-4"
-            />
+                <div className='flex '>
+                    <button 
+                        type="submit"
+                        className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-md font-bold"
+                    >
+                        Save Address
+                    </button>
+                    <button
+                        type='button'
+                        className='text-blue-500 ml-4'
+                    >
+                        Cancel
+                    </button>
+                </div>
 
-            <Button
-                type="primary"
-                onClick={handleSaveAddress}
-                className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold"
-            >
-                Save Address
-            </Button>
-            <Button
-                type="link"
-                className="text-blue-500 ml-4"
-                onClick={() => navigation('/checkout')}
-            >
-                Cancel
-            </Button>
+            </form>
             
         </div>
     );
